@@ -19,7 +19,7 @@ class InputView extends Component {
   }
 
   defaultProps: {
-    value: 0,
+    defaultValue: '',
     placeholder: '',
     viewStyle: {},
     onValueChange: () => {}
@@ -30,7 +30,7 @@ class InputView extends Component {
     super(props);
 
     this.state = {
-      isIOS : Platform.OS === 'ios', value: props.value, placeholder: props.placeholder,
+      isIOS : Platform.OS === 'ios', value: props.defaultValue, placeholder: props.placeholder,
       textHeight: 35 * Style.RATIO_X, plholderHeight: 35 * Style.RATIO_X
     }
 

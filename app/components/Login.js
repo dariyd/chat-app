@@ -10,7 +10,8 @@ import {
   View,
   TextInput,
   TouchableOpacity,
-  KeyboardAvoidingView
+  KeyboardAvoidingView,
+  Alert
 } from 'react-native';
 
 import { connect } from 'react-redux';
@@ -34,6 +35,19 @@ class Login extends Component<{}> {
     this.state = {
       isIOS: Platform.OS === 'ios', animating: false, showSignUp: false,
     };
+  }
+
+  componentWillMount() {
+    global.LOG('LOGIN will mount');
+  }
+
+  componentWillReceiveProps(nextProps: Object) {
+
+    if (this.props.user.error != nextProps.user.error) {
+      let {code, message} = nextProps.user.error;
+      console.log("ERROR")
+      Alert.alert(code, message);
+    }
   }
 
   render() {
@@ -73,8 +87,10 @@ class Login extends Component<{}> {
     );
   }
 
-  onLogin = (showSignUp) => {
-    this.props.navigation.navigate('Home');
+  onLogin = (isSignUp) => {
+    let {userName, email, password} = this;
+    this.props.loginUser(isSignUp, {userName, email, password})
+    //this.props.navigation.navigate('Home');
   }
 }
 
@@ -128,13 +144,13 @@ const styles = StyleSheet.create({
 
 function select(store) {
   return {
-    userInfo: store.user.userInfo
+    user: store.user
   };
 }
 
 function actions(dispatch) {
   return {
-    loginUser: (email, passcode) => dispatch(loginUser(email, passcode)),
+    loginUser: (isSignUp, params) => dispatch(loginUser(isSignUp, params)),
   };
 }
 

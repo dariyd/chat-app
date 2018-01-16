@@ -4,14 +4,14 @@ import {
   View,
   NetInfo,
   AppState,
-  StatusBar,
+  StatusBar
 } from 'react-native';
 import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { StackNavigator } from 'react-navigation';
 import LoginScreen from './app/components/Login';
 import HomeScreen from './app/components/Home';
-import {changeConnectionState } from './app/actions';
+import {changeConnectionState, initFirebase } from './app/actions';
 
 
 const ScreenNavigator = (signedIn = false) => {
@@ -31,7 +31,11 @@ class AppNavigation extends React.Component {
     NetInfo.addEventListener('connectionChange', this._handleConnectionInfoChange);
     AppState.addEventListener('change', this._handleAppStateChange);
 
-    //this.props.initFirebase();
+    this.props.initFirebase();
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return this.props.user.isLoggedIn !== nextProps.user.isLoggedIn
   }
 
   componentWillUnmount() {
@@ -52,7 +56,7 @@ class AppNavigation extends React.Component {
   }
 
   render() {
-    //console.log('this.props.user.isLoggedIn ', this.props.user.isLoggedIn)
+    console.log('this.props.user.isLoggedIn ', this.props.user.isLoggedIn)
     const ScreenNavigation = ScreenNavigator(this.props.user.isLoggedIn);
     //const MainNavigator = MainModalNavigator(ScreenNavigation);
 
@@ -81,7 +85,7 @@ function mapStateToProps(state) {
 
 function mapDispatchToProps(dispatch) {
   return {
-    //initFirebase: () => dispatch (initFirebase()),
+    initFirebase: () => dispatch(initFirebase()),
     changeConnectionState: (connectionInfo) => dispatch(changeConnectionState(connectionInfo))
   };
 }

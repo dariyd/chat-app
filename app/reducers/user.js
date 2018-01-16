@@ -1,5 +1,5 @@
 import type {Action} from '../actions/types';
-import {LOGGED_IN, LOG_OUT, SAVE_HISTORY} from '../actions/types';
+import {LOGGED_IN, LOG_OUT, AUTH_ERROR, UPDATE_USERS} from '../actions/types';
 
 export type State = {
   userInfo: ?Object;
@@ -8,10 +8,13 @@ export type State = {
 const initialState = {
   userInfo: {
     email: '',
-    passcode: '',
-    isLoggedIn: false,
   },
-  history: []
+  isLoggedIn: false,
+  error: {
+    code: '',
+    message: '',
+  },
+  chatUsers: [],
 };
 
 export default function device(state: State = initialState, action: Action): State {
@@ -32,6 +35,29 @@ export default function device(state: State = initialState, action: Action): Sta
       ...state,
       userInfo: {},
       isLoggedIn: false,
+    }
+  }
+
+  if (action.type === AUTH_ERROR) {
+    
+    let {error} = action;
+    let {code, message} = error;
+    global.LOG('action AUTH_ERROR ', code, message);
+    return {
+      ...state,
+      error: {
+        code, 
+        message
+      }
+    }
+  }
+
+  if (action.type === UPDATE_USERS) {
+    let {chatUsers} = action;
+    global.LOG('action AUTH_ERROR ', code, message);
+    return {
+      ...state,
+      chatUsers
     }
   }
 
