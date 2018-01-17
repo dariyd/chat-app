@@ -2,8 +2,8 @@
 
 Simple chat app built with React Native and Firebase
 
-<p align="center">
-![example](https://github.com/dariyd/chat-app/blob/master/chat_demo.gif)
+<p align="left">
+  <img src="https://github.com/dariyd/chat-app/blob/master/chat_demo.gif" width="500">
 </p>
 
 ## Setup
