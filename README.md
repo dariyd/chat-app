@@ -3,7 +3,7 @@
 Simple chat app built with React Native and Firebase
 
 <p align="center">
-![example](chat_demo.gif)
+![example](https://github.com/dariyd/chat-app/blob/master/chat_demo.gif)
 </p>
 
 ## Setup
@@ -24,7 +24,7 @@ Simple chat app built with React Native and Firebase
 
   ```
   If you have problems with building ios project, remove `node_modules` folder and run again comand `yarn` from root directiry
-  
+
 3. **Running on Android**:
 
   ```
