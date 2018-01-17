@@ -1,6 +1,7 @@
 import type { Action, ThunkAction } from './types';
 import {SEND_MESSAGE, UPDATE_MESSAGES} from './types';
 import firebase from 'react-native-firebase';
+import moment from 'moment';
 
 const messagesRef = firebase.database().ref('messages');
 const fireBaseAuth = firebase.auth();
@@ -14,25 +15,50 @@ export function sendMessage(message) : ThunkAction {
     let {email,uid, displayName} = user;
     console.log('userName ', email,uid, displayName);
 
-    messagesRef.push({
+    let newMessageRef = messagesRef.push();
+    let msg = {
+      id: newMessageRef.key,
       message,
-      m_Id: Math.random().toString(36).substr(2, 10),
       displayName, 
       email,
-      u_id: uid
-    }, () => {
-      console.log('success');
-    });
+      time: moment().valueOf(),
+      //u_id: uid
+    }
+
+    newMessageRef.set(msg);
+
+    // messagesRef.push({
+    //   message,
+    //   m_id: Math.random().toString(36).substr(2, 10),
+    //   displayName, 
+    //   email,
+    //   createdAt: moment().valueOf(),
+    //   u_id: uid
+    // }, () => {
+    //   console.log('success');
+    // });
   };
 }
 
 export function fetchMessagesListener() : ThunkAction {
   return (dispatch, getState) => {
-    messagesRef.on('value', (snapshot) => {
-      const messages = snapshot.val();
-      console.log("messages", messages);
 
-      dispatch(updateMessagesList(messages ? messages : []));
+    messagesRef.orderByKey().limitToLast(10).on('value', (snapshot) => {
+
+      let keys = snapshot.key;
+      let messages = snapshot.val();
+
+      let mesArray = []
+      snapshot.forEach(function(childSnapshot) {
+        var childKey = childSnapshot.key;
+        var childData = childSnapshot.val();
+        //console.log("keys", childKey);
+        //console.log("childData", childData);
+        mesArray.push(childData);
+
+      });
+
+      dispatch(updateMessagesList(mesArray));
     });
   };
 }

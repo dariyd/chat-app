@@ -14,7 +14,7 @@ const initialState = {
 export default function device(state: State = initialState, action: Action): State {
   if (action.type == UPDATE_MESSAGES) {
     let {data} = action;
-    console.log('action.data UPDATE_MESSAGES ', data);
+    //console.log('action.data UPDATE_MESSAGES ', data);
     return {
       ...state,
       data
